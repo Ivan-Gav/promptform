@@ -11,9 +11,7 @@ function App() {
   const [textInput, setTextInput] = useState("");
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const resultRef = useRef<HTMLDivElement>(
-    null
-  ) as React.RefObject<HTMLDivElement>;
+  const resultRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   useEffect(() => {
     fetchOptions().then(setOptions);
@@ -34,7 +32,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8 md:p-16 gap-8">
+  <div className="w-screen min-h-screen flex flex-col items-center justify-start p-8 md:p-16 gap-8 bg-gray-100 dark:bg-gray-900">
       <Form
         options={options}
         selectedOptions={selectedOptions}
