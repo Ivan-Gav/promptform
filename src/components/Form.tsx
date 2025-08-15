@@ -1,18 +1,17 @@
-import React from "react";
 import Select from "react-select";
-import type { OptionType } from "../api/index";
+import type { OptionType } from "../model/types";
 
-interface FormProps {
+type TFormProps = {
   options: OptionType[];
   selectedOptions: OptionType[];
   setSelectedOptions: (opts: OptionType[]) => void;
   textInput: string;
   setTextInput: (val: string) => void;
   loading: boolean;
-  onSubmit: (e: React.FormEvent) => void;
-}
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+};
 
-const Form: React.FC<FormProps> = ({
+const Form = ({
   options,
   selectedOptions,
   setSelectedOptions,
@@ -20,7 +19,7 @@ const Form: React.FC<FormProps> = ({
   setTextInput,
   loading,
   onSubmit,
-}) => {
+}: TFormProps) => {
   return (
     <form
       className="bg-white dark:bg-gray-800 shadow-md px-8 pt-8 pb-8 mb-8 w-full max-w-lg flex flex-col gap-6"
@@ -58,6 +57,15 @@ const Form: React.FC<FormProps> = ({
                 ...base,
                 borderRadius: 6,
                 backgroundColor: isDark ? "#374151" : base.backgroundColor,
+              };
+            },
+            multiValueLabel: (base) => {
+              const isDark = window.matchMedia(
+                "(prefers-color-scheme: dark)"
+              ).matches;
+              return {
+                ...base,
+                color: isDark ? "#e5e7eb" : "#374151",
               };
             },
             menu: (base) => {
