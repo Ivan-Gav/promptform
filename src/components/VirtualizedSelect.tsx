@@ -25,8 +25,8 @@ const VirtualizedMenuList = (props: MenuListProps<TOption>) => {
         itemCount={itemCount}
         itemSize={ITEM_HEIGHT}
         width="100%"
-  style={{ overflowY: "auto", pointerEvents: "auto" }}
-        >
+        style={{ overflowY: "auto", pointerEvents: "auto" }}
+      >
         {({ index, style }) => {
           const option = options[index];
           const label =
@@ -57,9 +57,21 @@ const VirtualizedMenuList = (props: MenuListProps<TOption>) => {
 
 // VirtualizedSelect component
 const VirtualizedSelect = (props: SelectProps<TOption, true>) => {
+  const [inputValue, setInputValue] = React.useState("");
+
+  // Filter options by inputValue (case-insensitive, contains)
+  const filteredOptions = React.useMemo(() => {
+    if (!inputValue) return props.options;
+    return props.options?.filter((opt) =>
+      String(opt.label).toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }, [inputValue, props.options]);
+
   return (
     <Select
       {...props}
+      options={filteredOptions}
+      onInputChange={(val) => setInputValue(val)}
       components={{
         ...props.components,
         MenuList: VirtualizedMenuList,

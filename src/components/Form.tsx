@@ -1,4 +1,3 @@
-import Select from "react-select";
 import VirtualizedSelect from "./VirtualizedSelect";
 import { useForm, Controller } from "react-hook-form";
 import clsx from "clsx";
