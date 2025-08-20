@@ -1,4 +1,5 @@
 import Select from "react-select";
+import VirtualizedSelect from "./VirtualizedSelect";
 import { useForm, Controller } from "react-hook-form";
 import clsx from "clsx";
 import type { TFormValues, TOption } from "../model/types";
@@ -49,7 +50,7 @@ const Form = ({ options, loading, onSubmit, children }: TFormProps) => {
           name="selectedOptions"
           control={control}
           render={({ field }) => (
-            <Select
+            <VirtualizedSelect
               isMulti
               options={options}
               value={field.value}
