@@ -2,7 +2,7 @@ import type { RefObject } from "react";
 
 type TResultAreaProps = {
   results: string[];
-  resultRef: RefObject<HTMLDivElement>;
+  resultRef: RefObject<HTMLDivElement | null>;
   error: string | null;
 };
 

@@ -10,4 +10,19 @@ export type TStreamChunk =
 export type TRequestData = {
   document_ids?: string[];
   query?: string;
+  opts: {
+    max_length: number;
+    neighbours: number;
+    top_chunks: number;
+    top_documents: number;
+  };
+};
+
+export type FormValues = {
+  selectedOptions: OptionType[];
+  textInput: string;
+  maxLength: number;
+  neighbours: number;
+  topChunks: number;
+  topDocuments: number;
 };
