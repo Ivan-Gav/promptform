@@ -10,6 +10,7 @@ import { RadioButtons } from "./components/RadioButtons";
 function App() {
   const [options, setOptions] = useState<TOption[]>([]);
   const [endpoint, setEndpoint] = useState<TEndpointName>("generation");
+  const [lastEndpoint, setLastEndpoint] = useState<TEndpointName>(endpoint);
 
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -21,6 +22,7 @@ function App() {
 
   // TFormValues type must match the one in Form.tsx
   const handleSubmit = async (data: TFormValues) => {
+    setLastEndpoint(endpoint);
     const document_ids = data.selectedOptions.map(({ value }) => value);
     await fetchData({
       document_ids,
@@ -44,7 +46,12 @@ function App() {
           disabled={isLoading}
         />
       </Form>
-      <ResultArea results={output} error={error} resultRef={outputRef} />
+      <ResultArea
+        results={output}
+        error={error}
+        endpointName={lastEndpoint}
+        resultRef={outputRef}
+      />
     </div>
   );
 }
