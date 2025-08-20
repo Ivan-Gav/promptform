@@ -1,11 +1,18 @@
 import { useState } from "react";
-import type { TRequestData, TStreamChunk } from "../model/types";
-import { suggestionsURL } from "./constants";
+import type {
+  TDocSuggestion,
+  TEndpointName,
+  TRequestData,
+  TStreamChunk,
+} from "../model/types";
+import { ENDPOINTS } from "../model/constants";
 
-export const useStream = () => {
+export const useStream = (endpoint: TEndpointName) => {
   const [output, setOutput] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const url = ENDPOINTS[endpoint];
 
   const fetchStreamData = async (requestData: TRequestData) => {
     setIsLoading(true);
@@ -13,7 +20,7 @@ export const useStream = () => {
     setOutput([]);
 
     try {
-      const response = await fetch(suggestionsURL, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,5 +83,55 @@ export const useStream = () => {
     }
   };
 
-  return { fetchStreamData, isLoading, error, output };
+  const fetchSimpleData = async (requestData: TRequestData) => {
+    setIsLoading(true);
+    setError(null);
+    setOutput([]);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (endpoint === "context") {
+        const data = await response.text();
+        const output = data || "Нет контекста";
+        setOutput([output]);
+      } else if (endpoint === "suggestDocs") {
+        const data = (await response.json()) as TDocSuggestion[];
+        if (Array.isArray(data) && data.length) {
+          for (const doc of data) {
+            setOutput((prev) => [
+              ...prev,
+              `${doc.Type} ${doc.Number}: ${doc.Title} \n \n`,
+            ]);
+          }
+        } else {
+          const output =
+            JSON.stringify(data, null, 2) || "Нет предложенных документов";
+          setOutput([output]);
+        }
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError(err instanceof Error ? err.message : "Неизвестная ошибка");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    fetchData: endpoint === "generation" ? fetchStreamData : fetchSimpleData,
+    isLoading,
+    error,
+    output,
+  };
 };

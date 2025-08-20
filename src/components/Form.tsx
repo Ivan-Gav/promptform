@@ -1,21 +1,22 @@
 import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
 import clsx from "clsx";
-import type { FormValues, OptionType } from "../model/types";
+import type { TFormValues, TOption } from "../model/types";
+import type { PropsWithChildren } from "react";
 
-type TFormProps = {
-  options: OptionType[];
+type TFormProps = PropsWithChildren<{
+  options: TOption[];
   loading: boolean;
-  onSubmit: (data: FormValues) => Promise<void>;
-};
+  onSubmit: (data: TFormValues) => Promise<void>;
+}>;
 
-const Form = ({ options, loading, onSubmit }: TFormProps) => {
+const Form = ({ options, loading, onSubmit, children }: TFormProps) => {
   const {
     control,
     handleSubmit,
     register,
     formState: { errors, isDirty },
-  } = useForm<FormValues>({
+  } = useForm<TFormValues>({
     defaultValues: {
       selectedOptions: [],
       textInput: "",
@@ -28,7 +29,7 @@ const Form = ({ options, loading, onSubmit }: TFormProps) => {
     reValidateMode: "onChange",
   });
 
-  const getInputClasses = (inputName: keyof FormValues) =>
+  const getInputClasses = (inputName: keyof TFormValues) =>
     clsx(
       "w-full shadow border rounded-lg py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-900 leading-tight focus:outline-none focus:ring-2",
       {
@@ -210,6 +211,8 @@ const Form = ({ options, loading, onSubmit }: TFormProps) => {
             </label>
           </div>
         </fieldset>
+
+        {children}
 
         <button
           type="submit"

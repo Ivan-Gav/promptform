@@ -1,7 +1,7 @@
-import type { OptionType } from "../model/types";
+import type { TOption } from "../model/types";
 import { docsURL } from "./constants";
 
-export async function fetchOptions(): Promise<OptionType[]> {
+export async function fetchOptions(): Promise<TOption[]> {
   const res = await fetch(docsURL);
   const data = await res.json();
   console.log(data);

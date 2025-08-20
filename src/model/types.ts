@@ -1,4 +1,4 @@
-export type OptionType = { value: string; label: string };
+export type TOption = { value: string; label: string };
 
 export type TStreamChunk =
   | {
@@ -18,11 +18,25 @@ export type TRequestData = {
   };
 };
 
-export type FormValues = {
-  selectedOptions: OptionType[];
+export type TFormValues = {
+  selectedOptions: TOption[];
   textInput: string;
   maxLength: number;
   neighbours: number;
   topChunks: number;
   topDocuments: number;
+};
+
+export type TEndpointName = "context" | "suggestDocs" | "generation";
+
+export type TDocSuggestion = {
+  AllChunks: number;
+  CreatedAt: string;
+  ID: string;
+  Number: string;
+  Score: number;
+  Source: string;
+  Title: string;
+  Type: string;
+  UpdatedAt: string;
 };
